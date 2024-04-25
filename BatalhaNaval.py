@@ -1,19 +1,15 @@
 from module import *
-
+from constants import *
 import random
 from copy import deepcopy
 
-PAISES = {
-    'Brasil': {'cruzador': 1, 'torpedeiro': 2, 'destroyer': 1, 'couracado': 1, 'porta-avioes': 1}, 
-    'França': {'cruzador': 3, 'porta-avioes': 1, 'destroyer': 1, 'submarino': 1, 'couracado': 1},
-    'Austrália': {'couracado': 1, 'cruzador': 3, 'submarino': 1, 'porta-avioes': 1, 'torpedeiro': 1},
-    'Rússia': {'cruzador': 1, 'porta-avioes': 1, 'couracado': 2, 'destroyer': 1, 'submarino': 1},
-    'Japão': {'torpedeiro': 2, 'cruzador': 1, 'destroyer': 2, 'couracado': 1, 'submarino': 1}
-}
-
-# quantidade de blocos por modelo de navio
-CONFIGURACAO = {'destroyer': 3, 'porta-avioes': 5, 'submarino': 2,
-                'torpedeiro': 3, 'cruzador': 2, 'couracado': 4}
+def GameTitle():
+    system('cls')
+    sleep(0.7)
+    print('\n' + bold_text('=========================== BATANLHA NAVAL ===========================') + '\n')
+    sleep(1)
+    print(italic_text('> by Enzo Savino e Gabriel Sallum. Insper - Dessoft - EP2'))
+    sleep(0.7)
 
 def InicializeGame(show=True):
     global pais_user, pais_comp
