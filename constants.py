@@ -9,3 +9,5 @@ PAISES = {
 # quantidade de blocos por modelo de navio
 CONFIGURACAO = {'destroyer': 3, 'porta-avioes': 5, 'submarino': 2,
                 'torpedeiro': 3, 'cruzador': 2, 'couracado': 4}
+
+LETRAS = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J']
