@@ -8,10 +8,9 @@ def GameTitle():
     system('cls')
     sleep(0.7)
     output = '\n'
-    colors = ['Black', 'Red', 'Green', 'Yellow', 'Blue', 'Magenta', 'Cyan', 'White']
     string = '''==================================================================================================================================='''
     for ch in string:
-        output += colored_text(ch, random.choice(colors))
+        output += colored_text(ch, random.choice(COLORS))
     output += '\n'
     print(output)
     print(text2art('BATALHA   NAVAL', space=2))
