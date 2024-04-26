@@ -123,3 +123,8 @@ def _Comp_aloca_navios(comp_board: list, blocos: list) -> list[str]:
                         i2 += 1
                 break
     return comp_board
+
+if __name__ == '__main__':
+    GameTitle()
+    progress_bar()
+    InicializeGame()
