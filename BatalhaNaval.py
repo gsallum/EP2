@@ -123,6 +123,85 @@ def _Comp_aloca_navios(comp_board: list, blocos: list) -> list[str]:
                 break
     return comp_board
 
+def AlocarNavios(mapa=cria_mapa(10)):
+
+    user_frota = [navio for navio, quant in PAISES[pais_user].items() 
+             for _ in range(quant)]
+    
+    user_board = deepcopy(mapa)
+    comp_board = deepcopy(mapa)
+    
+    comp_frota = [navio for navio, quant in PAISES[pais_comp].items() 
+             for _ in range(quant)]
+    blocos = [CONFIGURACAO[navio] for navio in comp_frota]
+
+    comp_board = _Comp_aloca_navios(comp_board=comp_board, blocos=blocos)
+
+    print_board(user_board, 'user')
+
+    while user_frota:
+        navio_alocado = user_frota.pop(0)
+        num_bloco = CONFIGURACAO[navio_alocado]
+        print(f'alocar: {navio_alocado}   > {num_bloco} blocos <')
+        print('próximos:', ', '.join(user_frota))
+
+        while True:
+            letra = input('\nInforme a letra: ').upper()
+            if letra in LETRAS:
+                coluna = LETRAS.index(letra)
+                linha = input('Informe a linha: ')
+                if linha in [str(i) for i in range(1, 11)]:
+                    linha = int(linha)
+                    linha = linha - 1
+                    orientação = input('Informe a orientação  [v|h]: ').lower()
+                    if orientação in 'hv':
+                        if posicao_suporta(mapa=user_board, blocos=num_bloco, linha=linha, 
+                                        coluna=coluna, orientação=orientação):
+                            i = linha
+                            i2 = coluna
+                            for _ in range(num_bloco):
+                                if orientação == 'v':
+                                    user_board[i][coluna] = 'N'
+                                    i += 1
+                                elif orientação == 'h':
+                                    user_board[linha][i2] = 'N'
+                                    i2 += 1
+                            break
+                        else:
+                            print('\n' + italic_text(' = posição inválida! = '))
+                            print('Tente novamente...')
+                    else:
+                        print(italic_text('> Insira uma posição válida!'))
+                else:
+                    print(italic_text('> Insira uma linha válida!'))
+            else:
+                print(italic_text('> Insira uma letra válida!'))
+
+        print_board(user_board, 'user')
+    return user_board, comp_board
+
+def print_board(board, qual):
+    if qual == 'comp':
+        print('\n       ' + u'\u2022' + bold_text(' PAÍS COMPUTADOR - ') + bold_text(pais_comp))
+    elif qual == 'user':
+        print('\n         ' + u'\u2022' + bold_text(' PAÍS JOGADOR - ') + bold_text(pais_user))
+
+    print('\n      ' + '  '.join(LETRAS))
+    i = 1
+    for row in board:
+        new_row = []
+        for ch in row:
+            if ch == 'N':
+                new_row.append(colored_text('N', 'Background Green'))
+            else:
+                new_row.append(ch)
+        s = '  '.join(new_row)
+        if i != 10:
+            print(f'  {i}   {s}  {i}')
+            i += 1
+        else:
+            print(f'  {i}  {s}  {i}\n')
+
 if __name__ == '__main__':
     GameTitle()
     progress_bar()
