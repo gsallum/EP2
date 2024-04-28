@@ -358,3 +358,9 @@ if __name__ == '__main__':
         if play_again != 'sim':
             print(colored_text(bold_text('OBRIGADO POR JOGAR'), 'Yellow'))
             break
+        else:
+            print('Reiniciando em:')
+            for num in reversed(range(1, 6)):
+                sleep(0.36)
+                print(num)
+            sleep(0.4)
