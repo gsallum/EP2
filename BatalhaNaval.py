@@ -263,8 +263,3 @@ def PlayGame(user_board, comp_board):
             print(output)
             break
 
-if __name__ == '__main__':
-    GameTitle()
-    progress_bar()
-    InicializeGame()
-    user, comp = AlocarNavios()
