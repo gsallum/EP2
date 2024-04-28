@@ -267,3 +267,94 @@ def PlayGame(user_board, comp_board):
             print(output)
             break
 
+def PlayGame(user_board, comp_board):
+    print('\nCOMEÇANDO O JOGO EM:')
+    for num in reversed(range(1, 6)):
+        sleep(0.36)
+        print(num)
+    sleep(0.4)
+    system('cls')
+    sleep(0.05)
+    print_board(user_board, 'user')
+    vazio_comp_board = cria_mapa(10)
+    print_board(vazio_comp_board, 'comp')
+
+    n = len(user_board[0])
+    user_turns = []
+    comp_turns = []
+    while True:
+        while True:
+            print('Insira as coordenadas do seu disparo.')
+            letra = input('Informe a letra: ').upper()
+            if letra in LETRAS:
+                coluna = LETRAS.index(letra)
+                linha = input('Informe a linha: ')
+                if linha in [str(i) for i in range(1, 11)]:
+                    linha = int(linha)
+                    linha = linha - 1
+
+                    if (linha, coluna) not in user_turns:
+                        # checar se essa coordenda é agua ou navio no comp_board
+                        # dependendo passar pro vazio_mapa nessa mesma coordenada a cor pra printar
+                        user_turns.append((linha, coluna))
+                        if comp_board[linha][coluna] == 'N':
+                            vazio_comp_board[linha][coluna] = colored_text(' ', 'Background Red')
+                            comp_board[linha][coluna] = 'X'
+                        elif comp_board[linha][coluna] == ' ':
+                            vazio_comp_board[linha][coluna] = colored_text(' ', 'Background Blue')
+                        break
+                    else:
+                        print(italic_text('> Você já inseriu essa coordenada anteriormente!') + '\n')
+
+                else:
+                    print(italic_text('> Insira uma linha válida!') + '\n')
+            else:
+                print(italic_text('> Insira uma letra válida!') + '\n')
+
+        print_board(vazio_comp_board, 'comp')
+        if foi_derrotado(comp_board):
+            output = ''
+            string = '- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -'
+            for ch in string:
+                if ch == '-':
+                    output += colored_text(ch, random.choice(COLORS))
+            print(output)
+            print(bold_text('--> Acabou o jogo! Parabéns Jogador, você VENCEU!\n'))
+            print(text2art('VITORIA !'))
+            print(output)
+            break
+
+        # ! vez do computador
+        while True:
+            clinha = random.randint(0, n-1)
+            ccoluna = random.randint(0, n-1)
+
+            if (clinha, ccoluna) not in comp_turns:
+                comp_turns.append((clinha, ccoluna))
+                if user_board[clinha][ccoluna] == 'N':
+                    user_board[clinha][ccoluna] = colored_text('X', 'Background Red')
+                elif user_board[clinha][ccoluna] == ' ':
+                    user_board[clinha][ccoluna] = colored_text(' ', 'Background Blue')
+                break
+
+        print_board(user_board, 'user')
+        if foi_derrotado(user_board):
+            print('\n')
+            print(bold_text(colored_text('Acabou o jogo! O computador venceu! Não foi dessa vez... =(', 'Red')))
+            break
+
+if __name__ == '__main__':
+
+    while True:
+        GameTitle()
+        progress_bar()
+        InicializeGame()
+        user, comp = AlocarNavios()
+        # print_board(comp, 'comp')
+        sleep(0.5)
+        PlayGame(user, comp)
+
+        play_again = input('\n> Deseja jogar novamente? (sim/nao)\n> ')
+        if play_again != 'sim':
+            print(colored_text(bold_text('OBRIGADO POR JOGAR'), 'Yellow'))
+            break
