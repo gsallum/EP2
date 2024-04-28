@@ -1,3 +1,7 @@
+'''   IMPORTE A BIBLIOTECA 'art'
+'pip install art'
+'''
+
 from module import *
 import random
 from copy import deepcopy
