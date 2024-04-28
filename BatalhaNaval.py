@@ -184,11 +184,11 @@ def AlocarNavios(mapa=cria_mapa(10)):
 
 def print_board(board, qual):
     if qual == 'comp':
-        print('\n       ' + u'\u2022' + bold_text(' PAÍS COMPUTADOR - ') + bold_text(pais_comp))
+        print('\n    ' + u'\u2022' + bold_text(' PAÍS COMPUTADOR - ') + bold_text(pais_comp))
     elif qual == 'user':
-        print('\n         ' + u'\u2022' + bold_text(' PAÍS JOGADOR - ') + bold_text(pais_user))
+        print('\n    ' + u'\u2022' + bold_text(' PAÍS JOGADOR - ') + bold_text(pais_user))
 
-    print('\n      ' + '  '.join(LETRAS))
+    print('\n     ' + ' '.join(LETRAS))
     i = 1
     for row in board:
         new_row = []
@@ -197,12 +197,14 @@ def print_board(board, qual):
                 new_row.append(colored_text('N', 'Background Green'))
             else:
                 new_row.append(ch)
-        s = '  '.join(new_row)
+        s = ' '.join(new_row)
         if i != 10:
-            print(f'  {i}   {s}  {i}')
+            print(f'  {i}  {s}  {i}')
             i += 1
         else:
-            print(f'  {i}  {s}  {i}\n')
+            print(f' {i}  {s}  {i}')
+    print('     ' + ' '.join(LETRAS), end='')
+    print('\n')
 
 def PlayGame(user_board, comp_board):
     print('\nCOMEÇANDO O JOGO EM:')
