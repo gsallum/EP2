@@ -5,7 +5,7 @@
 from module import *
 import random
 from copy import deepcopy
-from art import *
+from art import text2art
 from constants import *
 
 def GameTitle():
