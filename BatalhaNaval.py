@@ -202,6 +202,63 @@ def print_board(board, qual):
         else:
             print(f'  {i}  {s}  {i}\n')
 
+def PlayGame(user_board, comp_board):
+    print('\nCOMEÇANDO O JOGO EM:')
+    for num in reversed(range(1, 6)):
+        sleep(0.36)
+        print(num)
+    sleep(0.4)
+    system('cls')
+    sleep(0.05)
+    print_board(user_board, 'user')
+    vazio_comp_board = cria_mapa(10)
+    print_board(vazio_comp_board, 'comp')
+
+    n = len(user_board[0])
+    user_turns = []
+    comp_turns = []
+    while True:
+        while True:
+            print('Insira as coordenadas do seu disparo.')
+            letra = input('Informe a letra: ').upper()
+            if letra in LETRAS:
+                coluna = LETRAS.index(letra)
+                linha = input('Informe a linha: ')
+                if linha in [str(i) for i in range(1, 11)]:
+                    linha = int(linha)
+                    linha = linha - 1
+
+                    if (linha, coluna) not in user_turns:
+                        # checar se essa coordenda é agua ou navio no comp_board
+                        # dependendo passar pro vazio_mapa nessa mesma coordenada a cor pra printar
+                        user_turns.append((linha, coluna))
+                        if comp_board[linha][coluna] == 'N':
+                            vazio_comp_board[linha][coluna] = colored_text(' ', 'Background Red')
+                            comp_board[linha][coluna] = 'X'
+                        elif comp_board[linha][coluna] == ' ':
+                            vazio_comp_board[linha][coluna] = colored_text(' ', 'Background Blue')
+                        break
+                    else:
+                        print(italic_text('> Você já inseriu essa coordenada anteriormente!') + '\n')
+
+                else:
+                    print(italic_text('> Insira uma linha válida!') + '\n')
+            else:
+                print(italic_text('> Insira uma letra válida!') + '\n')
+
+        print_board(vazio_comp_board, 'comp')
+        if foi_derrotado(comp_board):
+            output = ''
+            string = '- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -'
+            for ch in string:
+                if ch == '-':
+                    output += colored_text(ch, random.choice(COLORS))
+            print(output)
+            print(bold_text('--> Acabou o jogo! Parabéns Jogador, você VENCEU!\n'))
+            print(text2art('VITORIA !'))
+            print(output)
+            break
+
 if __name__ == '__main__':
     GameTitle()
     progress_bar()
