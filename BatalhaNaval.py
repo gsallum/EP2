@@ -142,8 +142,10 @@ def AlocarNavios(mapa=cria_mapa(10)):
     while user_frota:
         navio_alocado = user_frota.pop(0)
         num_bloco = CONFIGURACAO[navio_alocado]
-        print(f'alocar: {navio_alocado}   > {num_bloco} blocos <')
-        print('próximos:', ', '.join(user_frota))
+        string = str(num_bloco) + ' blocos'
+        colored_str = colored_text(string, 'Yellow')
+        print(f'> alocar: {bold_text(navio_alocado)}   > {colored_str} <')
+        print('> próximos:', ', '.join(user_frota))
 
         while True:
             letra = input('\nInforme a letra: ').upper()
@@ -263,3 +265,4 @@ if __name__ == '__main__':
     GameTitle()
     progress_bar()
     InicializeGame()
+    user, comp = AlocarNavios()
