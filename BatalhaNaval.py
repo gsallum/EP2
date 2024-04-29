@@ -140,8 +140,10 @@ def AlocarNavios(mapa=cria_mapa(10)):
     blocos = [CONFIGURACAO[navio] for navio in comp_frota]
 
     comp_board = _Comp_aloca_navios(comp_board=comp_board, blocos=blocos)
+    
+    vazio_comp_board = cria_mapa(10)
 
-    print_board(user_board, 'user')
+    print_board(user_board, vazio_comp_board)
 
     while user_frota:
         navio_alocado = user_frota.pop(0)
@@ -183,37 +185,47 @@ def AlocarNavios(mapa=cria_mapa(10)):
             else:
                 print(italic_text('> Insira uma letra válida!'))
 
-        print_board(user_board, 'user')
-    return user_board, comp_board
+        print_board(user_board, vazio_comp_board)
+    return user_board, comp_board, vazio_comp_board
 
-def print_board(board, qual):
-    if qual == 'comp':
-        print('\n       ' + u'\u2022' + bold_text(' PAÍS COMPUTADOR - ') + bold_text(pais_comp))
-    elif qual == 'user':
-        print('\n         ' + u'\u2022' + bold_text(' PAÍS JOGADOR - ') + bold_text(pais_user))
+def print_board(user_board, vazio_comp_board):
+    legenda1 = '\n        ' + u'\u2022' + bold_text(' PAÍS JOGADOR - ') + bold_text(pais_user)
+    legenda2 = ' ' * 22 + u'\u2022' + bold_text(' PAÍS COMPUTADOR - ') + bold_text(pais_comp)
+    print(legenda1 + legenda2)
+    print('\n       ' + '  '.join(LETRAS) + '                 ' + '  '.join(LETRAS))
 
-    print('\n       ' + '  '.join(LETRAS))
-    i = 1
-    for row in board:
-        new_row = ''
-        for ch in row:
+    for i, (user_row, comp_row) in enumerate(zip(user_board, vazio_comp_board), start=1):
+        user_row_str = ''
+        comp_row_str = ''
+
+        for ch in user_row:
             if ch == 'N':
-                new_row += colored_text('   ', 'Background Green')
+                user_row_str += colored_text('   ', 'Background Green')
             elif ch == 'A':
-                new_row += colored_text('   ', 'Background Blue')
-            elif ch == 'X': 
-                new_row += colored_text('   ', 'Background Red')
+                user_row_str += colored_text('   ', 'Background Blue')
+            elif ch == 'X':
+                user_row_str += colored_text('   ', 'Background Red')
             else:
-                new_row += '   '
+                user_row_str += '   '
 
-        if i != 10:
-            print(f'  {i}   {new_row}  {i}')
-            i += 1
+        for ch in comp_row:
+            if ch == 'N':
+                comp_row_str += colored_text('   ', 'Background Green')
+            elif ch == 'A':
+                comp_row_str += colored_text('   ', 'Background Blue')
+            elif ch == 'X':
+                comp_row_str += colored_text('   ', 'Background Red')
+            else:
+                comp_row_str += '   '
+
+        if i < 10:
+            print(f'  {i}   {user_row_str}  {i}        {i}   {comp_row_str}  {i}')
         else:
-            print(f'  {i}  {new_row}  {i}')
-    print('       ' + '  '.join(LETRAS) + '\n')
+            print(f' {i}   {user_row_str}  {i}      {i}   {comp_row_str}  {i}')
+    print('       ' + '  '.join(LETRAS) + '                 ' + '  '.join(LETRAS) + '\n')
 
-def PlayGame(user_board, comp_board):
+
+def PlayGame(user_board, comp_board, vazio_comp_board):
     print('\nCOMEÇANDO O JOGO EM:')
     for num in reversed(range(1, 6)):
         sleep(0.36)
@@ -221,9 +233,7 @@ def PlayGame(user_board, comp_board):
     sleep(0.4)
     system('cls')
     sleep(0.05)
-    print_board(user_board, 'user')
-    vazio_comp_board = cria_mapa(10)
-    print_board(vazio_comp_board, 'comp')
+    print_board(user_board, vazio_comp_board)
 
     n = len(user_board[0])
     user_turns = []
@@ -255,8 +265,8 @@ def PlayGame(user_board, comp_board):
             else:
                 print(italic_text('> Insira uma letra válida!') + '\n')
 
-        print_board(vazio_comp_board, 'comp')
         if foi_derrotado(comp_board):
+            print_board(user_board, vazio_comp_board)
             output = ''
             string = '- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -'
             for ch in string:
@@ -281,22 +291,25 @@ def PlayGame(user_board, comp_board):
                     user_board[clinha][ccoluna] = 'A'
                 break
 
-        print_board(user_board, 'user')
         if foi_derrotado(user_board):
+            print_board(user_board, vazio_comp_board)
             print('\n')
             print(bold_text(colored_text('Acabou o jogo! O computador venceu! Não foi dessa vez... =(', 'Red')))
             break
+        
+        print_board(user_board, vazio_comp_board)
 
+        
 if __name__ == '__main__':
 
     while True:
         GameTitle()
         progress_bar()
         InicializeGame()
-        user, comp = AlocarNavios()
-        # print_board(comp, 'comp')
+        user, comp, vazio = AlocarNavios()
+        # print_board(user, comp)
         sleep(0.5)
-        PlayGame(user, comp)
+        PlayGame(user, comp, vazio)
 
         play_again = input('\n> Deseja jogar novamente? (sim/nao)\n> ')
         if play_again != 'sim':
