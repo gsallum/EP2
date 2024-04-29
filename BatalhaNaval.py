@@ -188,27 +188,30 @@ def AlocarNavios(mapa=cria_mapa(10)):
 
 def print_board(board, qual):
     if qual == 'comp':
-        print('\n    ' + u'\u2022' + bold_text(' PAÍS COMPUTADOR - ') + bold_text(pais_comp))
+        print('\n       ' + u'\u2022' + bold_text(' PAÍS COMPUTADOR - ') + bold_text(pais_comp))
     elif qual == 'user':
-        print('\n    ' + u'\u2022' + bold_text(' PAÍS JOGADOR - ') + bold_text(pais_user))
+        print('\n         ' + u'\u2022' + bold_text(' PAÍS JOGADOR - ') + bold_text(pais_user))
 
-    print('\n     ' + ' '.join(LETRAS))
+    print('\n       ' + '  '.join(LETRAS))
     i = 1
     for row in board:
-        new_row = []
+        new_row = ''
         for ch in row:
             if ch == 'N':
-                new_row.append(colored_text('N', 'Background Green'))
+                new_row += colored_text('   ', 'Background Green')
+            elif ch == 'A':
+                new_row += colored_text('   ', 'Background Blue')
+            elif ch == 'X': 
+                new_row += colored_text('   ', 'Background Red')
             else:
-                new_row.append(ch)
-        s = ' '.join(new_row)
+                new_row += '   '
+
         if i != 10:
-            print(f'  {i}  {s}  {i}')
+            print(f'  {i}   {new_row}  {i}')
             i += 1
         else:
-            print(f' {i}  {s}  {i}')
-    print('     ' + ' '.join(LETRAS), end='')
-    print('\n')
+            print(f'  {i}  {new_row}  {i}')
+    print('       ' + '  '.join(LETRAS) + '\n')
 
 def PlayGame(user_board, comp_board):
     print('\nCOMEÇANDO O JOGO EM:')
@@ -237,71 +240,12 @@ def PlayGame(user_board, comp_board):
                     linha = linha - 1
 
                     if (linha, coluna) not in user_turns:
-                        # checar se essa coordenda é agua ou navio no comp_board
-                        # dependendo passar pro vazio_mapa nessa mesma coordenada a cor pra printar
                         user_turns.append((linha, coluna))
                         if comp_board[linha][coluna] == 'N':
-                            vazio_comp_board[linha][coluna] = colored_text(' ', 'Background Red')
+                            vazio_comp_board[linha][coluna] = 'X' # acertou navio
                             comp_board[linha][coluna] = 'X'
                         elif comp_board[linha][coluna] == ' ':
-                            vazio_comp_board[linha][coluna] = colored_text(' ', 'Background Blue')
-                        break
-                    else:
-                        print(italic_text('> Você já inseriu essa coordenada anteriormente!') + '\n')
-
-                else:
-                    print(italic_text('> Insira uma linha válida!') + '\n')
-            else:
-                print(italic_text('> Insira uma letra válida!') + '\n')
-
-        print_board(vazio_comp_board, 'comp')
-        if foi_derrotado(comp_board):
-            output = ''
-            string = '- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -'
-            for ch in string:
-                if ch == '-':
-                    output += colored_text(ch, random.choice(COLORS))
-            print(output)
-            print(bold_text('--> Acabou o jogo! Parabéns Jogador, você VENCEU!\n'))
-            print(text2art('VITORIA !'))
-            print(output)
-            break
-
-def PlayGame(user_board, comp_board):
-    print('\nCOMEÇANDO O JOGO EM:')
-    for num in reversed(range(1, 6)):
-        sleep(0.36)
-        print(num)
-    sleep(0.4)
-    system('cls')
-    sleep(0.05)
-    print_board(user_board, 'user')
-    vazio_comp_board = cria_mapa(10)
-    print_board(vazio_comp_board, 'comp')
-
-    n = len(user_board[0])
-    user_turns = []
-    comp_turns = []
-    while True:
-        while True:
-            print('Insira as coordenadas do seu disparo.')
-            letra = input('Informe a letra: ').upper()
-            if letra in LETRAS:
-                coluna = LETRAS.index(letra)
-                linha = input('Informe a linha: ')
-                if linha in [str(i) for i in range(1, 11)]:
-                    linha = int(linha)
-                    linha = linha - 1
-
-                    if (linha, coluna) not in user_turns:
-                        # checar se essa coordenda é agua ou navio no comp_board
-                        # dependendo passar pro vazio_mapa nessa mesma coordenada a cor pra printar
-                        user_turns.append((linha, coluna))
-                        if comp_board[linha][coluna] == 'N':
-                            vazio_comp_board[linha][coluna] = colored_text(' ', 'Background Red')
-                            comp_board[linha][coluna] = 'X'
-                        elif comp_board[linha][coluna] == ' ':
-                            vazio_comp_board[linha][coluna] = colored_text(' ', 'Background Blue')
+                            vazio_comp_board[linha][coluna] = 'A' # agua
                         break
                     else:
                         print(italic_text('> Você já inseriu essa coordenada anteriormente!') + '\n')
@@ -332,9 +276,9 @@ def PlayGame(user_board, comp_board):
             if (clinha, ccoluna) not in comp_turns:
                 comp_turns.append((clinha, ccoluna))
                 if user_board[clinha][ccoluna] == 'N':
-                    user_board[clinha][ccoluna] = colored_text('X', 'Background Red')
+                    user_board[clinha][ccoluna] = 'X'
                 elif user_board[clinha][ccoluna] == ' ':
-                    user_board[clinha][ccoluna] = colored_text(' ', 'Background Blue')
+                    user_board[clinha][ccoluna] = 'A'
                 break
 
         print_board(user_board, 'user')
